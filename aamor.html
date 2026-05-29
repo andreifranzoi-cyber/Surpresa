@@ -292,5 +292,22 @@ try {
   window.addEventListener('load', () => setTimeout(() => { ac.resume(); playMelody(); }, 800));
 } catch(e) {}
 </script>
+  <audio id="musica" autoplay loop>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+window.addEventListener('load', () => {
+  const musica = document.getElementById('musica');
+
+  musica.volume = 0.4;
+
+  musica.play().catch(() => {
+    document.addEventListener('click', () => {
+      musica.play();
+    }, { once: true });
+  });
+});
+</script>
 </body>
 </html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Não clique nesse botão</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nunito:wght@400;700;900&display=swap');
+
+  :root {
+    --green: #1a1a2e;
+    --mid: #16213e;
+    --accent: #4ade80;
+    --warn: #facc15;
+    --red: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--green);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,222,128,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,222,128,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .warning-badge {
+    display: inline-block;
+    background: var(--warn);
+    color: #1a1a2e;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 4px;
+    margin-bottom: 28px;
+    animation: pulse 1.5s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(36px, 9vw, 80px);
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .title span {
+    color: var(--red);
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 3vw, 18px);
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 52px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Danger ring animation */
+  .btn-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 2px dashed rgba(248,113,113,0.4);
+    animation: spin 8s linear infinite;
+  }
+
+  .btn-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -26px;
+    border-radius: 50%;
+    border: 1px dashed rgba(248,113,113,0.2);
+    animation: spin 14s linear infinite reverse;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .btn {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: radial-gradient(circle at 35% 35%, #f87171, #dc2626, #991b1b);
+    box-shadow:
+      0 0 0 4px rgba(248,113,113,0.15),
+      0 0 60px rgba(248,113,113,0.3),
+      0 8px 40px rgba(0,0,0,0.5),
+      inset 0 2px 0 rgba(255,255,255,0.2);
+    transition: transform 0.08s, box-shadow 0.08s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow:
+      0 0 0 4px rgba(248,113,113,0.25),
+      0 0 80px rgba(248,113,113,0.5),
+      0 12px 50px rgba(0,0,0,0.5),
+      inset 0 2px 0 rgba(255,255,255,0.2);
+  }
+
+  .btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Shine */
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 12%;
+    left: 20%;
+    width: 35%;
+    height: 25%;
+    background: rgba(255,255,255,0.18);
+    border-radius: 50%;
+    filter: blur(4px);
+  }
+
+  .btn-emoji {
+    font-size: 52px;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+    animation: wiggle 2s ease infinite;
+  }
+
+  @keyframes wiggle {
+    0%,100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .btn-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    position: relative;
+    z-index: 1;
+  }
+
+  .caption {
+    margin-top: 44px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.22);
+    font-weight: 400;
+  }
+
+  /* ── SOUND WAVE ── */
+  .wave-bar {
+    display: inline-block;
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(74,222,128,0.5);
+    margin: 0 1.5px;
+    animation: wave-anim var(--dur) ease infinite;
+    transform-origin: bottom;
+  }
+
+  @keyframes wave-anim {
+    0%,100% { transform: scaleY(0.2); }
+    50% { transform: scaleY(1); }
+  }
+
+  .wave-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 24px;
+    margin-bottom: 32px;
+    gap: 0;
+  }
+
+  /* ── EXPLOSION OVERLAY ── */
+  #explosion {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  #explosion.active {
+    pointer-events: all;
+  }
+
+  #explosion-bg {
+    position: absolute;
+    inset: 0;
+    background: #1a1a2e;
+    transform: scale(0);
+    border-radius: 50%;
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 0.55s;
+  }
+
+  #explosion.active #explosion-bg {
+    transform: scale(6);
+    border-radius: 0;
+  }
+
+  #explosion-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s,
+                opacity 0.3s ease 0.4s;
+  }
+
+  #explosion.active #explosion-content {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+
+  .fart-emoji {
+    font-size: clamp(80px, 20vw, 140px);
+    display: block;
+    animation: none;
+  }
+
+  #explosion.active .fart-emoji {
+    animation: bounce 0.6s ease 0.45s both;
+  }
+
+  @keyframes bounce {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.3) rotate(-5deg); }
+    80% { transform: scale(0.9) rotate(3deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .fart-text {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(28px, 7vw, 56px);
+    color: #facc15;
+    margin: 16px 0 8px;
+    opacity: 0;
+  }
+
+  #explosion.active .fart-text {
+    animation: textPop 0.4s ease 0.6s both;
+  }
+
+  @keyframes textPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .fart-sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(13px, 3vw, 17px);
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 40px;
+    opacity: 0;
+  }
+
+  #explosion.active .fart-sub {
+    animation: textPop 0.4s ease 0.75s both;
+  }
+
+  .redirect-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #f9a8d4, #ec4899);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: clamp(14px, 3vw, 18px);
+    padding: 16px 40px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 8px 30px rgba(236,72,153,0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    letter-spacing: 0.3px;
+  }
+
+  #explosion.active .redirect-btn {
+    animation: slideUp 0.5s ease 0.9s both;
+  }
+
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .redirect-btn:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 12px 40px rgba(236,72,153,0.6);
+  }
+
+  /* floating particles */
+  .particle {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 99;
+    animation: flyOut var(--dur) ease-out forwards;
+    opacity: 1;
+  }
+
+  @keyframes flyOut {
+    0% { transform: translate(0,0) scale(0.5) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="warning-badge">⚠ aviso importante ⚠</div>
+
+  <h1 class="title">NÃO <span>CLIQUE</span><br>NESSE BOTÃO</h1>
+  <p class="subtitle">sério. não clica. não vai ser legal.</p>
+
+  <!-- sound wave decoration -->
+  <div class="wave-container" id="wave"></div>
+
+  <div class="btn-wrapper">
+    <button class="btn" id="fartBtn" onclick="triggerFart()">
+      <span class="btn-emoji">💨</span>
+      <span class="btn-label">NÃO CLICA</span>
+    </button>
+  </div>
+
+  <p class="caption">você foi avisado(a).</p>
+</div>
+
+<!-- Explosion overlay -->
+<div id="explosion">
+  <div id="explosion-bg"></div>
+  <div id="explosion-content">
+    <span class="fart-emoji">💨</span>
+    <p class="fart-text">PRRRRRT 💀</p>
+    <p class="fart-sub">eu te avisei. agora aguenta.</p>
+    <a class="redirect-btn" href="amor.html">tá bom... o que é isso? →</a>
+  </div>
+</div>
+
+<script>
+// Build wave bars
+const wave = document.getElementById('wave');
+const bars = 28;
+for (let i = 0; i < bars; i++) {
+  const b = document.createElement('div');
+  b.className = 'wave-bar';
+  const h = 8 + Math.sin(i * 0.7) * 14 + Math.random() * 4;
+  b.style.height = h + 'px';
+  const dur = 0.6 + Math.random() * 0.8;
+  b.style.setProperty('--dur', dur + 's');
+  b.style.animationDelay = (i * 0.04) + 's';
+  wave.appendChild(b);
+}
+
+// Fart sound using Web Audio
+function playFart() {
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Noise burst
+    const bufSize = ac.sampleRate * 0.8;
+    const buf = ac.createBuffer(1, bufSize, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / bufSize);
+    }
+
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+
+    const filter = ac.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(180, ac.currentTime);
+    filter.frequency.linearRampToValueAtTime(80, ac.currentTime + 0.6);
+    filter.Q.value = 0.8;
+
+    const gain = ac.createGain();
+    gain.gain.setValueAtTime(0.5, ac.currentTime);
+    gain.gain.linearRampToValueAtTime(0, ac.currentTime + 0.7);
+
+    src.connect(filter);
+    filter.connect(gain);
+    gain.connect(ac.destination);
+    src.start();
+    src.stop(ac.currentTime + 0.8);
+  } catch(e) {}
+}
+
+function spawnParticles() {
+  const btn = document.getElementById('fartBtn');
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const emojis = ['💨','💩','😵','🤢','😷','☁️','💀','🌬️'];
+
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const angle = (i / 18) * Math.PI * 2;
+    const dist = 120 + Math.random() * 180;
+    el.style.left = cx + 'px';
+    el.style.top = cy + 'px';
+    el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    el.style.setProperty('--ty', Math.sin(angle) * dist - 60 + 'px');
+    el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    el.style.setProperty('--dur', (0.6 + Math.random() * 0.6) + 's');
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+  }
+}
+
+function triggerFart() {
+  playFart();
+  spawnParticles();
+
+  // Shake button
+  const btn = document.getElementById('fartBtn');
+  btn.style.animation = 'none';
+  let shakes = 0;
+  const shakeInt = setInterval(() => {
+    btn.style.transform = `translate(${(Math.random()-0.5)*12}px, ${(Math.random()-0.5)*8}px) rotate(${(Math.random()-0.5)*8}deg)`;
+    if (++shakes > 10) { clearInterval(shakeInt); btn.style.transform = ''; }
+  }, 50);
+
+  // Show explosion
+  setTimeout(() => {
+    const exp = document.getElementById('explosion');
+    exp.style.opacity = '1';
+    exp.classList.add('active');
+  }, 300);
+}
+</script>
+</body>
+</html>

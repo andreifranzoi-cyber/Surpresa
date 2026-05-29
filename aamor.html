@@ -298,13 +298,13 @@ try {
 
 <script>
 window.addEventListener('load', () => {
-  const musica = document.getElementById('musicaa');
+  const musica = document.getElementById('musica');
 
-  musicaa.volume = 0.4;
+  musica.volume = 0.5;
 
-  musicaa.play().catch(() => {
+  musica.play().catch(() => {
     document.addEventListener('click', () => {
-      musicaa.play();
+      musica.play();
     }, { once: true });
   });
 });
